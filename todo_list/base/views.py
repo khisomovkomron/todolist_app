@@ -13,6 +13,7 @@ from .models import Task
 
 
 class CustomLoginView(LoginView):
+    """Class that displays login form in template and returns to tasks page if successfull"""
     template_name = 'base/login.html'
     fields = '__all__'
     redirect_authenticated_user = True
@@ -22,6 +23,7 @@ class CustomLoginView(LoginView):
 
 
 class RegisterPage(FormView):
+    """Class that displays register form and redirects to main page if user is authorized"""
     template_name = 'base/register.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
@@ -40,6 +42,7 @@ class RegisterPage(FormView):
 
 
 class TaskList(LoginRequiredMixin, ListView):
+    """Class that lists all tasks that belong to authorized user, also search is implemented"""
     model = Task
     context_object_name = 'tasks'
     
@@ -57,12 +60,14 @@ class TaskList(LoginRequiredMixin, ListView):
     
     
 class TaskDetail(LoginRequiredMixin, DetailView):
+    """Class that displays detail of a task that belongs to authorized user"""
     model = Task
     context_object_name = 'task'
     template_name = 'base/task.html'
     
 
 class TaskCreate(LoginRequiredMixin, CreateView):
+    """Class that allows authorized user to create new task, returns to tasks/ page if successfull"""
     model = Task
     fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('tasks')
@@ -73,12 +78,14 @@ class TaskCreate(LoginRequiredMixin, CreateView):
     
     
 class TaskUpdate(LoginRequiredMixin, UpdateView):
+    """Class that allows authorized user to update specific task, returns to tasks/ page if successfull"""
     model = Task
     fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('tasks')
 
 
-class DeleteView(LoginRequiredMixin, DeleteView):
+class DeleteSpecificView(LoginRequiredMixin, DeleteView):
+    """Class that allows authorized user to delete specific task, returns to tasks/ page if successfull"""
     model = Task
     context_object_name = 'task'
     success_url = reverse_lazy('tasks')
